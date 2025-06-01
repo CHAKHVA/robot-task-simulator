@@ -10,3 +10,9 @@ export interface Robot {
   target?: [number, number];
   path: [number, number][];
 }
+
+export interface Task {
+  id: string;
+  position: [number, number];
+  assignedTo?: string;
+}
