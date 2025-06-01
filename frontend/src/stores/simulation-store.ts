@@ -37,3 +37,13 @@ interface SimulationState {
   moveRobots: () => void;
   isSimulationComplete: () => boolean;
 }
+
+const createEmptyGrid = (): Cell[][] => {
+  return Array.from({ length: GRID_ROWS }, (_, row) =>
+    Array.from({ length: GRID_COLS }, (_, col) => ({
+      row,
+      col,
+      type: "empty" as const,
+    }))
+  );
+};
