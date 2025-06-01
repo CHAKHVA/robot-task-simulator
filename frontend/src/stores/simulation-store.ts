@@ -47,3 +47,7 @@ const createEmptyGrid = (): Cell[][] => {
     }))
   );
 };
+
+const generateUniqueId = (): string => {
+  return Math.random().toString(36).substring(2, 9);
+};
