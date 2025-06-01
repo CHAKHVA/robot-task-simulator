@@ -19,3 +19,4 @@ export interface Task {
 
 export type Strategy = "nearest" | "roundrobin";
 export type Speed = "slow" | "normal" | "fast";
+export type PlacementMode = "robot" | "task";
