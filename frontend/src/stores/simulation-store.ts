@@ -1,4 +1,4 @@
-import { Cell, Robot, Task } from "@/types";
+import { Cell, Robot, Speed, Task } from "@/types";
 import { create } from "zustand";
 
 export const GRID_ROWS = 30;
@@ -9,11 +9,12 @@ interface SimulationState {
   grid: Cell[][];
   robots: Robot[];
   tasks: Task[];
-  /*
+
   // Simulation state
   isRunning: boolean;
   isPaused: boolean;
   speed: Speed;
+  /*
   strategy: Strategy;
   placementMode: PlacementMode;
 
@@ -21,10 +22,12 @@ interface SimulationState {
   start: () => void;
   pause: () => void;
   reset: () => void;
+  */
   tick: () => void;
 
   // Grid manipulation
   handleCellClick: (row: number, col: number) => void;
+  /*
   clearGrid: () => void;
   randomize: () => void;
 
@@ -125,10 +128,12 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     { id: "task11", position: [30, 35] },
   ],
 
-  /*
   isRunning: false,
   isPaused: false,
   speed: "normal",
+  handleCellClick: () => {},
+  tick: () => {},
+  /*
   strategy: "nearest",
   placementMode: "robot",
 
