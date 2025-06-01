@@ -86,20 +86,24 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       [20, 10],
       [20, 20],
       [20, 30], // Middle row
-      [30, 5],
-      [30, 15],
-      [30, 25],
-      [30, 35], // Bottom row
+      [25, 5],
+      [25, 15],
+      [25, 25],
+      [25, 35], // Bottom row
     ];
 
     // Update grid with robots
     robotPositions.forEach(([row, col]) => {
-      grid[row][col].type = "robot";
+      if (row < GRID_ROWS && col < GRID_COLS) {
+        grid[row][col].type = "robot";
+      }
     });
 
     // Update grid with tasks
     taskPositions.forEach(([row, col]) => {
-      grid[row][col].type = "task";
+      if (row < GRID_ROWS && col < GRID_COLS) {
+        grid[row][col].type = "task";
+      }
     });
 
     return grid;
@@ -122,10 +126,10 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     { id: "task5", position: [20, 10] },
     { id: "task6", position: [20, 20] },
     { id: "task7", position: [20, 30] },
-    { id: "task8", position: [30, 5] },
-    { id: "task9", position: [30, 15] },
-    { id: "task10", position: [30, 25] },
-    { id: "task11", position: [30, 35] },
+    { id: "task8", position: [25, 5] },
+    { id: "task9", position: [25, 15] },
+    { id: "task10", position: [25, 25] },
+    { id: "task11", position: [25, 35] },
   ],
 
   isRunning: false,
