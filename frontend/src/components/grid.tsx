@@ -1,3 +1,5 @@
+"use client";
+
 import { useSimulationStore } from "@/stores/simulation-store";
 import { useEffect } from "react";
 import GridCell from "./grid-cell";
