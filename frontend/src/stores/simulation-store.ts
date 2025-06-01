@@ -56,9 +56,74 @@ const generateUniqueId = (): string => {
 
 export const useSimulationStore = create<SimulationState>((set, get) => ({
   // Initial state
+  /*
   grid: createEmptyGrid(),
   robots: [],
   tasks: [],
+  */
+  grid: (() => {
+    const grid = createEmptyGrid();
+    // Place robots in a pattern
+    const robotPositions = [
+      [5, 10],
+      [5, 20],
+      [5, 30], // Top row
+      [15, 15],
+      [15, 25], // Middle row
+      [25, 10],
+      [25, 20],
+      [25, 30], // Bottom row
+    ];
+    // Place tasks in a pattern
+    const taskPositions = [
+      [10, 5],
+      [10, 15],
+      [10, 25],
+      [10, 35], // Top row
+      [20, 10],
+      [20, 20],
+      [20, 30], // Middle row
+      [30, 5],
+      [30, 15],
+      [30, 25],
+      [30, 35], // Bottom row
+    ];
+
+    // Update grid with robots
+    robotPositions.forEach(([row, col]) => {
+      grid[row][col].type = "robot";
+    });
+
+    // Update grid with tasks
+    taskPositions.forEach(([row, col]) => {
+      grid[row][col].type = "task";
+    });
+
+    return grid;
+  })(),
+  robots: [
+    { id: "robot1", position: [5, 10], path: [] },
+    { id: "robot2", position: [5, 20], path: [] },
+    { id: "robot3", position: [5, 30], path: [] },
+    { id: "robot4", position: [15, 15], path: [] },
+    { id: "robot5", position: [15, 25], path: [] },
+    { id: "robot6", position: [25, 10], path: [] },
+    { id: "robot7", position: [25, 20], path: [] },
+    { id: "robot8", position: [25, 30], path: [] },
+  ],
+  tasks: [
+    { id: "task1", position: [10, 5] },
+    { id: "task2", position: [10, 15] },
+    { id: "task3", position: [10, 25] },
+    { id: "task4", position: [10, 35] },
+    { id: "task5", position: [20, 10] },
+    { id: "task6", position: [20, 20] },
+    { id: "task7", position: [20, 30] },
+    { id: "task8", position: [30, 5] },
+    { id: "task9", position: [30, 15] },
+    { id: "task10", position: [30, 25] },
+    { id: "task11", position: [30, 35] },
+  ],
 
   /*
   isRunning: false,
