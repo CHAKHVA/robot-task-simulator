@@ -16,3 +16,5 @@ export interface Task {
   position: [number, number];
   assignedTo?: string;
 }
+
+export type Strategy = "nearest" | "roundrobin";
