@@ -8,7 +8,7 @@ interface GridCellProps {
   hasPath?: boolean;
 }
 
-export function GridCell({
+export default function GridCell({
   type,
   onClick,
   isHighlighted,
