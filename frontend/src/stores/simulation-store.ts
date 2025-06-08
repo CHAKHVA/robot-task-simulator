@@ -1,4 +1,4 @@
-import { Cell, Robot, Speed, Task } from "@/types";
+import { Cell, PlacementMode, Robot, Speed, Strategy, Task } from "@/types";
 import { create } from "zustand";
 
 export const GRID_ROWS = 30;
@@ -14,7 +14,7 @@ interface SimulationState {
   isRunning: boolean;
   isPaused: boolean;
   speed: Speed;
-  /*
+
   strategy: Strategy;
   placementMode: PlacementMode;
 
@@ -22,12 +22,12 @@ interface SimulationState {
   start: () => void;
   pause: () => void;
   reset: () => void;
-  */
+
   tick: () => void;
 
   // Grid manipulation
   handleCellClick: (row: number, col: number) => void;
-  /*
+
   clearGrid: () => void;
   randomize: () => void;
 
@@ -40,7 +40,6 @@ interface SimulationState {
   assignTasks: () => void;
   moveRobots: () => void;
   isSimulationComplete: () => boolean;
-  */
 }
 
 const createEmptyGrid = (): Cell[][] => {
@@ -59,11 +58,6 @@ const generateUniqueId = (): string => {
 
 export const useSimulationStore = create<SimulationState>((set, get) => ({
   // Initial state
-  /*
-  grid: createEmptyGrid(),
-  robots: [],
-  tasks: [],
-  */
   grid: (() => {
     const grid = createEmptyGrid();
     // Place robots in a pattern
@@ -137,7 +131,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   speed: "normal",
   handleCellClick: () => {},
   tick: () => {},
-  /*
+
   strategy: "nearest",
   placementMode: "robot",
 
@@ -399,5 +393,4 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     const { tasks } = get();
     return tasks.length === 0;
   },
-  */
 }));
