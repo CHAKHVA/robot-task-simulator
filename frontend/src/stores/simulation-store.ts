@@ -1,4 +1,9 @@
 import { Cell, PlacementMode, Robot, Speed, Strategy, Task } from "@/types";
+import { generatePath, getNextStep } from "@/utils/pathfinding";
+import {
+  assignTasksNearestFirst,
+  assignTasksRoundRobin,
+} from "@/utils/strategy";
 import { create } from "zustand";
 
 export const GRID_ROWS = 30;
@@ -129,8 +134,6 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   isRunning: false,
   isPaused: false,
   speed: "normal",
-  handleCellClick: () => {},
-  tick: () => {},
 
   strategy: "nearest",
   placementMode: "robot",
