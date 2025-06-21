@@ -212,7 +212,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
           grid: newGrid,
           robots: [...robots, newRobot],
         });
-      } else {
+      } else if (placementMode === "task") {
         const newTask: Task = {
           id: generateUniqueId(),
           position: [row, col],
@@ -220,6 +220,10 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
         set({
           grid: newGrid,
           tasks: [...tasks, newTask],
+        });
+      } else if (placementMode === "obstacle") {
+        set({
+          grid: newGrid,
         });
       }
     } else {
@@ -245,6 +249,10 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
           tasks: tasks.filter(
             (task) => task.position[0] !== row || task.position[1] !== col
           ),
+        });
+      } else if (cell.type === "obstacle") {
+        set({
+          grid: newGrid,
         });
       }
     }
@@ -319,7 +327,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
 
   // Helper methods
   assignTasks: () => {
-    const { robots, tasks, strategy } = get();
+    const { robots, tasks, strategy, grid } = get();
     let updatedRobots: Robot[];
 
     if (strategy === "nearest") {
@@ -331,7 +339,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     // Generate paths for robots with new targets
     updatedRobots.forEach((robot) => {
       if (robot.target && robot.path.length === 0) {
-        robot.path = generatePath(robot.position, robot.target);
+        robot.path = generatePath(robot.position, robot.target, grid);
       }
     });
 
@@ -347,12 +355,24 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     updatedRobots.forEach((robot) => {
       if (robot.path.length === 0) return;
 
+      // Check if next step is blocked by obstacle
+      const nextStep = getNextStep(robot);
+      if (
+        nextStep &&
+        updatedGrid[nextStep[0]][nextStep[1]].type === "obstacle"
+      ) {
+        // Regenerate path to avoid obstacle
+        if (robot.target) {
+          robot.path = generatePath(robot.position, robot.target, updatedGrid);
+        }
+        return;
+      }
+
       // Clear current position
       const [currentRow, currentCol] = robot.position;
       updatedGrid[currentRow][currentCol].type = "empty";
 
       // Move to next position
-      const nextStep = getNextStep(robot);
       if (nextStep) {
         robot.position = nextStep;
         robot.path = robot.path.slice(1);
