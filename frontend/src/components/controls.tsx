@@ -12,6 +12,7 @@ import {
 import { useSimulationStore } from "@/stores/simulation-store";
 import {
   Bot,
+  Mountain,
   Pause,
   Play,
   Shuffle,
@@ -115,6 +116,14 @@ export function Controls() {
             >
               <Target size={16} className="mr-1" />
               Tasks
+            </Button>
+            <Button
+              onClick={() => setPlacementMode("obstacle")}
+              variant={placementMode === "obstacle" ? "default" : "outline"}
+              size="sm"
+            >
+              <Mountain size={16} className="mr-1" />
+              Obstacles
             </Button>
           </div>
 
