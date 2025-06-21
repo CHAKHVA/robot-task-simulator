@@ -1,7 +1,7 @@
 export interface Cell {
   row: number;
   col: number;
-  type: "empty" | "robot" | "task";
+  type: "empty" | "robot" | "task" | "obstacle";
 }
 
 export interface Robot {
@@ -19,4 +19,4 @@ export interface Task {
 
 export type Strategy = "nearest" | "roundrobin";
 export type Speed = "slow" | "normal" | "fast";
-export type PlacementMode = "robot" | "task";
+export type PlacementMode = "robot" | "task" | "obstacle";
