@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import { Bot, Target } from "lucide-react";
+import { Bot, Mountain, Target } from "lucide-react";
 
 interface GridCellProps {
-  type: "empty" | "robot" | "task";
+  type: "empty" | "robot" | "task" | "obstacle";
   onClick: () => void;
   isHighlighted?: boolean;
   hasPath?: boolean;
@@ -22,6 +22,7 @@ export default function GridCell({
         type === "empty" && "bg-white",
         type === "robot" && "bg-blue-500 text-white hover:bg-blue-600",
         type === "task" && "bg-green-500 text-white hover:bg-green-600",
+        type === "obstacle" && "bg-gray-700 text-white hover:bg-gray-800",
         isHighlighted && "ring-2 ring-yellow-400 ring-opacity-50",
         hasPath && "bg-blue-100"
       )}
@@ -29,6 +30,7 @@ export default function GridCell({
     >
       {type === "robot" && <Bot size={12} />}
       {type === "task" && <Target size={12} />}
+      {type === "obstacle" && <Mountain size={12} />}
       {hasPath && type === "empty" && (
         <div className="absolute inset-0 bg-blue-200 opacity-30" />
       )}
