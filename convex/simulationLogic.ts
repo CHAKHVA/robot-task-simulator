@@ -1,28 +1,25 @@
-// convex/simulationLogic.ts
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
 
-// Types
 type Cell = {
   row: number;
   col: number;
   type: "empty" | "robot" | "task" | "obstacle";
 };
 
-type Robot = {
+export type Robot = {
   id: string;
   position: number[];
   target?: number[];
   path: number[][];
 };
 
-type Task = {
+export type Task = {
   id: string;
   position: number[];
   assignedTo?: string;
 };
 
-// Pathfinding helpers
 function manhattanDistance(pos1: number[], pos2: number[]): number {
   return Math.abs(pos1[0] - pos2[0]) + Math.abs(pos1[1] - pos2[1]);
 }
@@ -237,7 +234,8 @@ export const tick = mutation({
     const simulation = await ctx.db.query("simulations").first();
     if (!simulation || !simulation.isRunning || simulation.isPaused) return;
 
-    let { grid, robots, tasks, strategy } = simulation;
+    const { grid, tasks, strategy } = simulation;
+    let { robots } = simulation;
 
     // Assign tasks
     if (strategy === "nearest") {

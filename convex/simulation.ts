@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import type { Robot, Task } from "./simulationLogic";
 
 const GRID_ROWS = 30;
 const GRID_COLS = 75;
@@ -10,7 +11,7 @@ const createEmptyGrid = () => {
     Array.from({ length: GRID_COLS }, (_, col) => ({
       row,
       col,
-      type: "empty" as const,
+      type: "empty" as "empty" | "robot" | "task" | "obstacle",
     }))
   );
 };
@@ -272,8 +273,8 @@ export const randomizeGrid = mutation({
     if (!simulation) return;
 
     const newGrid = createEmptyGrid();
-    const newRobots: any[] = [];
-    const newTasks: any[] = [];
+    const newRobots: Robot[] = [];
+    const newTasks: Task[] = [];
 
     const robotCount = Math.floor(Math.random() * 10) + 5;
     const taskCount = Math.floor(Math.random() * 15) + 10;
@@ -353,7 +354,12 @@ export const updateSettings = mutation({
     const simulation = await ctx.db.query("simulations").first();
     if (!simulation) return;
 
-    const updates: any = {
+    const updates: Partial<{
+      speed: "slow" | "normal" | "fast";
+      strategy: "nearest" | "roundrobin";
+      lastUpdateBy?: string;
+      lastUpdateAt: number;
+    }> = {
       lastUpdateBy: userId,
       lastUpdateAt: Date.now(),
     };
@@ -374,8 +380,6 @@ export const simulationTick = mutation({
     const simulation = await ctx.db.query("simulations").first();
     if (!simulation || !simulation.isRunning || simulation.isPaused) return;
 
-    // This will be implemented with the pathfinding logic
-    // For now, just update the timestamp
     await ctx.db.patch(simulation._id, {
       lastUpdateBy: userId,
       lastUpdateAt: Date.now(),
