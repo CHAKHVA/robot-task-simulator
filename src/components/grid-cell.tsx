@@ -24,7 +24,7 @@ export default function GridCell({
         type === "task" && "bg-green-500 text-white hover:bg-green-600",
         type === "obstacle" && "bg-gray-700 text-white hover:bg-gray-800",
         isHighlighted && "ring-2 ring-yellow-400 ring-opacity-50",
-        hasPath && "bg-blue-100"
+        hasPath && "bg-blue-100",
       )}
       onClick={onClick}
     >

@@ -2,7 +2,7 @@ import { Cell, Robot } from "@/types";
 
 export function manhattanDistance(
   pos1: [number, number],
-  pos2: [number, number]
+  pos2: [number, number],
 ): number {
   return Math.abs(pos1[0] - pos2[0]) + Math.abs(pos1[1] - pos2[1]);
 }
@@ -18,7 +18,7 @@ interface PathNode {
 export function generatePath(
   start: [number, number],
   end: [number, number],
-  grid: Cell[][]
+  grid: Cell[][],
 ): [number, number][] {
   const [startRow, startCol] = start;
   const [endRow, endCol] = end;
@@ -115,7 +115,7 @@ export function generatePath(
 
       // Check if this path to neighbor is better than any previous one
       const existingNodeIndex = openSet.findIndex(
-        (node) => node.position[0] === newRow && node.position[1] === newCol
+        (node) => node.position[0] === newRow && node.position[1] === newCol,
       );
 
       if (existingNodeIndex === -1) {
@@ -132,7 +132,7 @@ export function generatePath(
 
 function generateSimplePath(
   start: [number, number],
-  end: [number, number]
+  end: [number, number],
 ): [number, number][] {
   const path: [number, number][] = [];
   const [startRow, startCol] = start;
