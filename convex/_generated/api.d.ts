@@ -13,8 +13,8 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as simulation_logic from "../simulation-logic.js";
 import type * as simulation from "../simulation.js";
+import type * as simulationLogic from "../simulationLogic.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -25,8 +25,8 @@ import type * as simulation from "../simulation.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  "simulation-logic": typeof simulation_logic;
   simulation: typeof simulation;
+  simulationLogic: typeof simulationLogic;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
