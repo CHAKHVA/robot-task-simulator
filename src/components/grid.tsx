@@ -33,7 +33,7 @@ export function Grid() {
               onClick={() => handleCellClick(rowIndex, colIndex, placementMode)}
               hasPath={pathPositions.has(`${rowIndex},${colIndex}`)}
             />
-          ))
+          )),
         )}
       </div>
       <svg
@@ -46,7 +46,7 @@ export function Grid() {
             const task = tasks.find(
               (t) =>
                 t.position[0] === robot.target![0] &&
-                t.position[1] === robot.target![1]
+                t.position[1] === robot.target![1],
             );
             if (!task) return null;
 

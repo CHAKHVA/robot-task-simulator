@@ -13,10 +13,10 @@ export default defineSchema({
             v.literal("empty"),
             v.literal("robot"),
             v.literal("task"),
-            v.literal("obstacle")
+            v.literal("obstacle"),
           ),
-        })
-      )
+        }),
+      ),
     ),
 
     // Entities
@@ -26,14 +26,14 @@ export default defineSchema({
         position: v.array(v.number()),
         target: v.optional(v.array(v.number())),
         path: v.array(v.array(v.number())),
-      })
+      }),
     ),
     tasks: v.array(
       v.object({
         id: v.string(),
         position: v.array(v.number()),
         assignedTo: v.optional(v.string()),
-      })
+      }),
     ),
 
     // Simulation state

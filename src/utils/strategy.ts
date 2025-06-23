@@ -3,7 +3,7 @@ import { manhattanDistance } from "./pathfinding";
 
 export function assignTasksNearestFirst(
   robots: Robot[],
-  tasks: Task[]
+  tasks: Task[],
 ): Robot[] {
   const updatedRobots = [...robots];
   const availableTasks = tasks.filter((task) => !task.assignedTo);

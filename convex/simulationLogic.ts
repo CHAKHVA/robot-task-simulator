@@ -35,7 +35,7 @@ interface PathNode {
 function generatePath(
   start: number[],
   end: number[],
-  grid: Cell[][]
+  grid: Cell[][],
 ): number[][] {
   const [startRow, startCol] = start;
   const [endRow, endCol] = end;
@@ -123,7 +123,7 @@ function generatePath(
       neighbor.f = neighbor.g + neighbor.h;
 
       const existingNodeIndex = openSet.findIndex(
-        (node) => node.position[0] === newRow && node.position[1] === newCol
+        (node) => node.position[0] === newRow && node.position[1] === newCol,
       );
 
       if (existingNodeIndex === -1) {
@@ -288,7 +288,7 @@ export const tick = mutation({
           const taskIndex = updatedTasks.findIndex(
             (task) =>
               task.position[0] === robot.target![0] &&
-              task.position[1] === robot.target![1]
+              task.position[1] === robot.target![1],
           );
 
           if (taskIndex !== -1) {

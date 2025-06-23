@@ -66,7 +66,7 @@ export function useSimulation() {
     handleCellClick: (
       row: number,
       col: number,
-      placementMode: "robot" | "task" | "obstacle"
+      placementMode: "robot" | "task" | "obstacle",
     ) => {
       if (!simulation?.isRunning) {
         updateCell({ row, col, placementMode, userId });

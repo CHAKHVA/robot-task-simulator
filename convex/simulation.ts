@@ -12,7 +12,7 @@ const createEmptyGrid = () => {
       row,
       col,
       type: "empty" as "empty" | "robot" | "task" | "obstacle",
-    }))
+    })),
   );
 };
 
@@ -119,7 +119,7 @@ export const updateCell = mutation({
     placementMode: v.union(
       v.literal("robot"),
       v.literal("task"),
-      v.literal("obstacle")
+      v.literal("obstacle"),
     ),
     userId: v.optional(v.string()),
   },
@@ -155,11 +155,11 @@ export const updateCell = mutation({
 
       if (cellType === "robot") {
         simulation.robots = simulation.robots.filter(
-          (robot) => robot.position[0] !== row || robot.position[1] !== col
+          (robot) => robot.position[0] !== row || robot.position[1] !== col,
         );
       } else if (cellType === "task") {
         simulation.tasks = simulation.tasks.filter(
-          (task) => task.position[0] !== row || task.position[1] !== col
+          (task) => task.position[0] !== row || task.position[1] !== col,
         );
       }
     }
@@ -343,10 +343,10 @@ export const randomizeGrid = mutation({
 export const updateSettings = mutation({
   args: {
     speed: v.optional(
-      v.union(v.literal("slow"), v.literal("normal"), v.literal("fast"))
+      v.union(v.literal("slow"), v.literal("normal"), v.literal("fast")),
     ),
     strategy: v.optional(
-      v.union(v.literal("nearest"), v.literal("roundrobin"))
+      v.union(v.literal("nearest"), v.literal("roundrobin")),
     ),
     userId: v.optional(v.string()),
   },
