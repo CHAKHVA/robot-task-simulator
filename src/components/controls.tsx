@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSimulation } from "@/hooks/useSimulation";
 import { useSimulationStore } from "@/stores/simulation-store";
 import {
   Bot,
@@ -27,7 +28,6 @@ export function Controls() {
     isPaused,
     speed,
     strategy,
-    placementMode,
     robots,
     tasks,
     start,
@@ -37,8 +37,9 @@ export function Controls() {
     randomize,
     setSpeed,
     setStrategy,
-    setPlacementMode,
-  } = useSimulationStore();
+  } = useSimulation();
+
+  const { placementMode, setPlacementMode } = useSimulationStore();
 
   const canStart = robots.length > 0 && tasks.length > 0 && !isRunning;
 
@@ -57,7 +58,6 @@ export function Controls() {
               <Play size={16} className="mr-1" />
               Start
             </Button>
-
             <Button
               onClick={pause}
               disabled={!isRunning}
@@ -67,7 +67,6 @@ export function Controls() {
               {isPaused ? <Play size={16} /> : <Pause size={16} />}
               <span className="ml-1">{isPaused ? "Resume" : "Pause"}</span>
             </Button>
-
             <Button
               onClick={reset}
               disabled={!isRunning && robots.every((r) => !r.target)}
@@ -88,7 +87,6 @@ export function Controls() {
               <Shuffle size={16} className="mr-1" />
               Randomize
             </Button>
-
             <Button onClick={clearGrid} variant="outline" size="sm">
               <Trash2 size={16} className="mr-1" />
               Clear All
@@ -175,7 +173,6 @@ export function Controls() {
                 {tasks.length} Tasks
               </Badge>
             </div>
-
             {isRunning && (
               <Badge variant={isPaused ? "secondary" : "default"}>
                 {isPaused ? "Paused" : "Running"}
