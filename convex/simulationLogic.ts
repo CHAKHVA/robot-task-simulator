@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
 
-type Cell = {
+export type Cell = {
   row: number;
   col: number;
   type: "empty" | "robot" | "task" | "obstacle";

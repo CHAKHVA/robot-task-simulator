@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import type { Robot, Task } from "./simulationLogic";
+import type { Cell, Robot, Task } from "./simulationLogic";
 
 const GRID_ROWS = 30;
 const GRID_COLS = 75;
@@ -8,11 +8,15 @@ const GRID_COLS = 75;
 // Helper function to create empty grid
 const createEmptyGrid = () => {
   return Array.from({ length: GRID_ROWS }, (_, row) =>
-    Array.from({ length: GRID_COLS }, (_, col) => ({
-      row,
-      col,
-      type: "empty" as "empty" | "robot" | "task" | "obstacle",
-    })),
+    Array.from(
+      { length: GRID_COLS },
+      (_, col) =>
+        ({
+          row,
+          col,
+          type: "empty",
+        }) as Cell,
+    ),
   );
 };
 
@@ -31,83 +35,6 @@ export const getSimulation = query({
     }
 
     return simulations[0];
-  },
-});
-
-// Initialize simulation
-export const initializeSimulation = mutation({
-  handler: async (ctx) => {
-    const existing = await ctx.db.query("simulations").first();
-
-    if (existing) {
-      return existing._id;
-    }
-
-    const grid = createEmptyGrid();
-
-    // Place initial robots
-    const robotPositions = [
-      [5, 10],
-      [5, 20],
-      [5, 30],
-      [15, 15],
-      [15, 25],
-      [25, 10],
-      [25, 20],
-      [25, 30],
-    ];
-
-    // Place initial tasks
-    const taskPositions = [
-      [10, 5],
-      [10, 15],
-      [10, 25],
-      [10, 35],
-      [20, 10],
-      [20, 20],
-      [20, 30],
-      [25, 5],
-      [25, 15],
-      [25, 25],
-      [25, 35],
-    ];
-
-    const robots = robotPositions.map((pos, i) => ({
-      id: `robot${i + 1}`,
-      position: pos,
-      path: [],
-    }));
-
-    const tasks = taskPositions.map((pos, i) => ({
-      id: `task${i + 1}`,
-      position: pos,
-    }));
-
-    // Update grid
-    robotPositions.forEach(([row, col]) => {
-      if (row < GRID_ROWS && col < GRID_COLS) {
-        grid[row][col].type = "robot";
-      }
-    });
-
-    taskPositions.forEach(([row, col]) => {
-      if (row < GRID_ROWS && col < GRID_COLS) {
-        grid[row][col].type = "task";
-      }
-    });
-
-    const id = await ctx.db.insert("simulations", {
-      grid,
-      robots,
-      tasks,
-      isRunning: false,
-      isPaused: false,
-      speed: "normal",
-      strategy: "nearest",
-      lastUpdateAt: Date.now(),
-    });
-
-    return id;
   },
 });
 
