@@ -1,4 +1,0 @@
-**/__tests__/**
-*.test.ts
-*.test.tsx
-src/test-utils/index.tsx 

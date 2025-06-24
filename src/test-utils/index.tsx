@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// src/test-utils/index.tsx
 import { ClerkProvider } from "@clerk/nextjs";
 import { render, RenderOptions } from "@testing-library/react";
 import { ConvexReactClient } from "convex/react";
