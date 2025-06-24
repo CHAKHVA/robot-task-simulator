@@ -12,6 +12,7 @@ export function useSimulation() {
   const simulation = useQuery(api.simulation.getSimulation);
 
   // Mutations
+  const initialize = useMutation(api.simulation.initializeSimulation);
   const updateCell = useMutation(api.simulation.updateCell);
   const start = useMutation(api.simulation.startSimulation);
   const togglePause = useMutation(api.simulation.togglePause);
@@ -20,6 +21,13 @@ export function useSimulation() {
   const randomize = useMutation(api.simulation.randomizeGrid);
   const updateSettings = useMutation(api.simulation.updateSettings);
   const tick = useMutation(api.simulationLogic.tick);
+
+  // Initialize simulation if it doesn't exist
+  useEffect(() => {
+    if (simulation === null) {
+      initialize();
+    }
+  }, [simulation, initialize]);
 
   // Simulation tick loop
   useEffect(() => {
@@ -58,7 +66,7 @@ export function useSimulation() {
     handleCellClick: (
       row: number,
       col: number,
-      placementMode: "robot" | "task" | "obstacle",
+      placementMode: "robot" | "task" | "obstacle"
     ) => {
       if (!simulation?.isRunning) {
         updateCell({ row, col, placementMode, userId });

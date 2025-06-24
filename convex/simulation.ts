@@ -15,8 +15,8 @@ const createEmptyGrid = () => {
           row,
           col,
           type: "empty",
-        }) as Cell,
-    ),
+        }) as Cell
+    )
   );
 };
 
@@ -38,6 +38,83 @@ export const getSimulation = query({
   },
 });
 
+// Initialize simulation
+export const initializeSimulation = mutation({
+  handler: async (ctx) => {
+    const existing = await ctx.db.query("simulations").first();
+
+    if (existing) {
+      return existing._id;
+    }
+
+    const grid = createEmptyGrid();
+
+    // Place initial robots
+    const robotPositions = [
+      [5, 10],
+      [5, 20],
+      [5, 30],
+      [15, 15],
+      [15, 25],
+      [25, 10],
+      [25, 20],
+      [25, 30],
+    ];
+
+    // Place initial tasks
+    const taskPositions = [
+      [10, 5],
+      [10, 15],
+      [10, 25],
+      [10, 35],
+      [20, 10],
+      [20, 20],
+      [20, 30],
+      [25, 5],
+      [25, 15],
+      [25, 25],
+      [25, 35],
+    ];
+
+    const robots = robotPositions.map((pos, i) => ({
+      id: `robot${i + 1}`,
+      position: pos,
+      path: [],
+    }));
+
+    const tasks = taskPositions.map((pos, i) => ({
+      id: `task${i + 1}`,
+      position: pos,
+    }));
+
+    // Update grid
+    robotPositions.forEach(([row, col]) => {
+      if (row < GRID_ROWS && col < GRID_COLS) {
+        grid[row][col].type = "robot";
+      }
+    });
+
+    taskPositions.forEach(([row, col]) => {
+      if (row < GRID_ROWS && col < GRID_COLS) {
+        grid[row][col].type = "task";
+      }
+    });
+
+    const id = await ctx.db.insert("simulations", {
+      grid,
+      robots,
+      tasks,
+      isRunning: false,
+      isPaused: false,
+      speed: "normal",
+      strategy: "nearest",
+      lastUpdateAt: Date.now(),
+    });
+
+    return id;
+  },
+});
+
 // Update grid cell
 export const updateCell = mutation({
   args: {
@@ -46,7 +123,7 @@ export const updateCell = mutation({
     placementMode: v.union(
       v.literal("robot"),
       v.literal("task"),
-      v.literal("obstacle"),
+      v.literal("obstacle")
     ),
     userId: v.optional(v.string()),
   },
@@ -82,11 +159,11 @@ export const updateCell = mutation({
 
       if (cellType === "robot") {
         simulation.robots = simulation.robots.filter(
-          (robot) => robot.position[0] !== row || robot.position[1] !== col,
+          (robot) => robot.position[0] !== row || robot.position[1] !== col
         );
       } else if (cellType === "task") {
         simulation.tasks = simulation.tasks.filter(
-          (task) => task.position[0] !== row || task.position[1] !== col,
+          (task) => task.position[0] !== row || task.position[1] !== col
         );
       }
     }
@@ -270,10 +347,10 @@ export const randomizeGrid = mutation({
 export const updateSettings = mutation({
   args: {
     speed: v.optional(
-      v.union(v.literal("slow"), v.literal("normal"), v.literal("fast")),
+      v.union(v.literal("slow"), v.literal("normal"), v.literal("fast"))
     ),
     strategy: v.optional(
-      v.union(v.literal("nearest"), v.literal("roundrobin")),
+      v.union(v.literal("nearest"), v.literal("roundrobin"))
     ),
     userId: v.optional(v.string()),
   },
