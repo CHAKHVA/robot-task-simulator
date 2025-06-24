@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // src/test-utils/index.tsx
 import { ClerkProvider } from "@clerk/nextjs";
 import { render, RenderOptions } from "@testing-library/react";
@@ -9,11 +10,13 @@ import React from "react";
 const mockConvexClient = new ConvexReactClient("https://test.convex.cloud");
 
 // Mock auth hook
-const mockUseAuth = () => ({
+const mockUseAuth = {
   isLoaded: true,
   isSignedIn: true,
   getToken: jest.fn().mockResolvedValue("mock-token"),
-});
+  orgId: undefined,
+  orgRole: undefined,
+};
 
 interface TestProviderProps {
   children: React.ReactNode;
@@ -22,7 +25,11 @@ interface TestProviderProps {
 function TestProvider({ children }: TestProviderProps) {
   return (
     <ClerkProvider>
-      <ConvexProviderWithClerk client={mockConvexClient} useAuth={mockUseAuth}>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <ConvexProviderWithClerk
+        client={mockConvexClient}
+        useAuth={() => mockUseAuth as any}
+      >
         {children}
       </ConvexProviderWithClerk>
     </ClerkProvider>
