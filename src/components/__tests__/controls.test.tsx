@@ -1,40 +1,44 @@
+import * as useSimulationModule from "@/hooks/useSimulation";
+import * as useSimulationStoreModule from "@/stores/simulation-store";
+import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Controls } from "../controls";
 
 // Mock the hooks
-jest.mock("@/hooks/useSimulation", () => ({
-  useSimulation: () => ({
-    isRunning: false,
-    isPaused: false,
-    speed: "normal",
-    strategy: "nearest",
-    robots: [{ id: "r1", position: [0, 0], path: [] }],
-    tasks: [{ id: "t1", position: [1, 1] }],
-    start: jest.fn(),
-    pause: jest.fn(),
-    reset: jest.fn(),
-    clearGrid: jest.fn(),
-    randomize: jest.fn(),
-    setSpeed: jest.fn(),
-    setStrategy: jest.fn(),
-  }),
-}));
-
-jest.mock("@/stores/simulation-store", () => ({
-  useSimulationStore: () => ({
-    placementMode: "robot",
-    setPlacementMode: jest.fn(),
-  }),
-}));
+jest.mock("@/hooks/useSimulation");
+jest.mock("@/stores/simulation-store");
 
 describe("Controls", () => {
-  const mockUseSimulation = require("@/hooks/useSimulation").useSimulation;
-  const mockUseSimulationStore =
-    require("@/stores/simulation-store").useSimulationStore;
+  let mockUseSimulation: jest.SpyInstance;
+  let mockUseSimulationStore: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseSimulation = jest.spyOn(useSimulationModule, "useSimulation");
+    mockUseSimulationStore = jest.spyOn(
+      useSimulationStoreModule,
+      "useSimulationStore"
+    );
+    mockUseSimulation.mockImplementation(() => ({
+      isRunning: false,
+      isPaused: false,
+      speed: "normal",
+      strategy: "nearest",
+      robots: [{ id: "r1", position: [0, 0], path: [] }],
+      tasks: [{ id: "t1", position: [1, 1] }],
+      start: jest.fn(),
+      pause: jest.fn(),
+      reset: jest.fn(),
+      clearGrid: jest.fn(),
+      randomize: jest.fn(),
+      setSpeed: jest.fn(),
+      setStrategy: jest.fn(),
+    }));
+    mockUseSimulationStore.mockImplementation(() => ({
+      placementMode: "robot",
+      setPlacementMode: jest.fn(),
+    }));
   });
 
   describe("Simulation Controls", () => {
@@ -48,7 +52,7 @@ describe("Controls", () => {
 
     it("should disable Start button when no robots", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         robots: [],
       });
 
@@ -60,7 +64,7 @@ describe("Controls", () => {
 
     it("should disable Start button when no tasks", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         tasks: [],
       });
 
@@ -72,7 +76,7 @@ describe("Controls", () => {
 
     it("should disable Start button when simulation is running", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         isRunning: true,
       });
 
@@ -84,7 +88,7 @@ describe("Controls", () => {
 
     it("should show Pause button when running and not paused", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         isRunning: true,
         isPaused: false,
       });
@@ -97,7 +101,7 @@ describe("Controls", () => {
 
     it("should show Resume button when running and paused", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         isRunning: true,
         isPaused: true,
       });
@@ -111,7 +115,7 @@ describe("Controls", () => {
     it("should call start when Start button is clicked", () => {
       const mockStart = jest.fn();
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         start: mockStart,
       });
 
@@ -126,7 +130,7 @@ describe("Controls", () => {
     it("should call randomize when Randomize button is clicked", () => {
       const mockRandomize = jest.fn();
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         randomize: mockRandomize,
       });
 
@@ -139,7 +143,7 @@ describe("Controls", () => {
     it("should call clearGrid when Clear All button is clicked", () => {
       const mockClearGrid = jest.fn();
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         clearGrid: mockClearGrid,
       });
 
@@ -164,7 +168,7 @@ describe("Controls", () => {
     it("should call setPlacementMode when mode buttons are clicked", () => {
       const mockSetPlacementMode = jest.fn();
       mockUseSimulationStore.mockReturnValueOnce({
-        ...mockUseSimulationStore(),
+        ...useSimulationStoreModule.useSimulationStore(),
         setPlacementMode: mockSetPlacementMode,
       });
 
@@ -187,7 +191,7 @@ describe("Controls", () => {
 
     it("should disable strategy selector when running", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         isRunning: true,
       });
 
@@ -200,7 +204,7 @@ describe("Controls", () => {
     it("should call setStrategy when strategy is changed", async () => {
       const mockSetStrategy = jest.fn();
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         setStrategy: mockSetStrategy,
       });
 
@@ -224,7 +228,7 @@ describe("Controls", () => {
     it("should call setSpeed when speed is changed", async () => {
       const mockSetSpeed = jest.fn();
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         setSpeed: mockSetSpeed,
       });
 
@@ -242,7 +246,7 @@ describe("Controls", () => {
   describe("Status Display", () => {
     it("should display robot and task counts", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         robots: [{ id: "r1" }, { id: "r2" }, { id: "r3" }],
         tasks: [{ id: "t1" }, { id: "t2" }],
       });
@@ -255,7 +259,7 @@ describe("Controls", () => {
 
     it("should show Running status when simulation is running", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         isRunning: true,
         isPaused: false,
       });
@@ -267,7 +271,7 @@ describe("Controls", () => {
 
     it("should show Paused status when simulation is paused", () => {
       mockUseSimulation.mockReturnValueOnce({
-        ...mockUseSimulation(),
+        ...useSimulationModule.useSimulation(),
         isRunning: true,
         isPaused: true,
       });
